@@ -1,0 +1,27 @@
+# Maven build output
+target/
+
+# Compiled class files
+*.class
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+nbproject/
+build/
+.settings/
+.classpath
+.project
+
+# Log and temporary files
+*.log
+*.tmp
+
+# Bills saved from the application
+ORD*.txt
+
+# OS files
+.DS_Store
+Thumbs.db
+dependency-reduced-pom.xml
