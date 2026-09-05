@@ -104,6 +104,14 @@ The SQL script creates these two accounts :
 
 New customers can also be created from the **Register** button on the login screen.
 
+Input rules used by the forms:
+
+- Email must look like `name@example.com` and cannot already be registered
+- Mobile number must be exactly 10 digits
+- Password must be at least 5 characters
+- Food price must be between 0.01 and 99999.99
+- Quantity must be a whole number from 1 to 100
+
 ---
 
 ## Project Structure
@@ -112,6 +120,9 @@ New customers can also be created from the **Register** button on the login scre
 Food-Ordering-System-Java
  ├── pom.xml                       Maven build file
  ├── README.md
+ ├── STUDENT_GUIDE.md              full explanation and viva preparation
+ ├── STUDENT_PROJECT_FLOW.md       one-page flow diagram
+ ├── VIVA_QUICK_REFERENCE.md       short revision sheet
  ├── database
  │    └── food_ordering_db.sql     script that creates the database
  ├── docs
@@ -154,6 +165,37 @@ An order and its order items are saved in one transaction, so a half saved
 order is never left in the database.
 
 ---
+
+## Testing Status
+
+The application was tested against a real MySQL database, not a simulated one.
+
+| What was tested | Result |
+|---|---|
+| Clean Maven build from source | Passes, 27 classes compile with no errors |
+| Database created from `food_ordering_db.sql` | 5 tables, 5 primary keys, 4 foreign keys, 3 unique keys |
+| Functional test suite | 43 checks, all passed |
+| Extended test suite (database, validation, errors) | 115 checks, all passed |
+| Live demonstration flow through the real screens | 40 steps, all passed |
+| Clean clone of `main`, rebuilt and re-tested | Passes |
+
+Documented test cases in the project report: **47, all passed.**
+
+Problems found during testing and fixed:
+
+- Several orders placed inside the same second could run out of order numbers
+- A dish marked as not available could still be ordered from a cart that already
+  contained it
+- A very large quantity was accepted by the quantity box
+
+## Documents for the Student
+
+| File | What it is |
+|---|---|
+| `STUDENT_GUIDE.md` | Full explanation of the project, Java and database concepts used, code walkthrough and 125 viva questions with answers |
+| `STUDENT_PROJECT_FLOW.md` | One-page diagram of the whole flow and where each technology fits |
+| `VIVA_QUICK_REFERENCE.md` | Short revision sheet to read before the viva |
+| `docs/BCA_Project_Report_Food_Ordering_System.docx` | The project report |
 
 ## Future Enhancements
 
