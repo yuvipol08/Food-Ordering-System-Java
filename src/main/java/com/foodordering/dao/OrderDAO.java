@@ -30,8 +30,15 @@ public class OrderDAO {
             "Pending", "Confirmed", "Preparing", "Ready", "Delivered"
     };
 
-    /** How many times a new order number is tried before giving up. */
-    private static final int MAX_NUMBER_ATTEMPTS = 5;
+    /**
+     * How many order numbers are tried before giving up. The suffix stays
+     * two digits, so the order number never grows longer than the 20
+     * characters allowed by the order_number column.
+     */
+    private static final int MAX_NUMBER_ATTEMPTS = 100;
+
+    /** MySQL error number for a duplicate value in a UNIQUE column. */
+    private static final int DUPLICATE_ENTRY = 1062;
 
     /**
      * Saves the cart as a new order.
@@ -45,6 +52,10 @@ public class OrderDAO {
      */
     public Order placeOrder(int userId, Cart cart, String paymentMode) throws SQLException {
 
+        if (cart == null || cart.isEmpty()) {
+            throw new SQLException("The cart is empty, so no order can be placed.");
+        }
+
         String orderSql = "INSERT INTO orders (order_number, user_id, order_date, total_amount, "
                         + "payment_mode, status) VALUES (?, ?, ?, ?, ?, 'Pending')";
         String itemSql  = "INSERT INTO order_items (order_id, food_id, quantity, price) "
@@ -54,6 +65,7 @@ public class OrderDAO {
 
         try {
             con = DBConnection.getConnection();
+            checkAllItemsAvailable(con, cart);
             con.setAutoCommit(false);
 
             Date now = new Date();
@@ -91,7 +103,11 @@ public class OrderDAO {
                     break;
 
                 } catch (SQLIntegrityConstraintViolationException duplicate) {
-                    if (attempt == MAX_NUMBER_ATTEMPTS - 1) {
+                    // Only a duplicate order number is worth trying again. Any other
+                    // integrity error, such as a user_id that does not exist, is a real
+                    // problem and is thrown out immediately.
+                    if (duplicate.getErrorCode() != DUPLICATE_ENTRY
+                            || attempt == MAX_NUMBER_ATTEMPTS - 1) {
                         throw duplicate;
                     }
                 }
@@ -139,6 +155,29 @@ public class OrderDAO {
             if (con != null) {
                 con.setAutoCommit(true);
                 con.close();
+            }
+        }
+    }
+
+    /**
+     * Checks that every dish in the cart is still marked available. The admin
+     * may have marked a dish as not available while it was lying in the cart,
+     * and such a dish must not be ordered.
+     */
+    private void checkAllItemsAvailable(Connection con, Cart cart) throws SQLException {
+        String sql = "SELECT food_id FROM food_items WHERE food_id = ? AND available = 'Yes'";
+
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            for (CartItem item : cart.getItems()) {
+                ps.setInt(1, item.getFoodItem().getFoodId());
+
+                try (ResultSet rs = ps.executeQuery()) {
+                    if (!rs.next()) {
+                        throw new SQLException("'" + item.getFoodItem().getFoodName()
+                                + "' is not available any more.\n"
+                                + "Please remove it from the cart and try again.");
+                    }
+                }
             }
         }
     }

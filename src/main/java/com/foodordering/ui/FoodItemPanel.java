@@ -203,7 +203,8 @@ public class FoodItemPanel extends JPanel {
             return null;
         }
         if (!Validator.isValidPrice(price)) {
-            showError("Please enter a valid price greater than 0, for example 120.50");
+            showError("Please enter a price between 0.01 and "
+                    + Validator.MAX_PRICE + ", for example 120.50");
             return null;
         }
 

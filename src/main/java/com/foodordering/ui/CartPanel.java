@@ -137,7 +137,8 @@ public class CartPanel extends JPanel {
             return;
         }
         if (!Validator.isValidQuantity(quantityField.getText())) {
-            showError("Please enter a valid quantity greater than 0.");
+            showError("Please enter a whole number quantity from 1 to "
+                    + Validator.MAX_QUANTITY + ".");
             return;
         }
 

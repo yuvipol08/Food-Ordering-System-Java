@@ -6,6 +6,12 @@ package com.foodordering.util;
  */
 public class Validator {
 
+    /** Largest quantity of one dish that can be ordered at a time. */
+    public static final int MAX_QUANTITY = 100;
+
+    /** Largest price that can be given to a dish, in rupees. */
+    public static final double MAX_PRICE = 99999.99;
+
     public static boolean isEmpty(String text) {
         return text == null || text.trim().isEmpty();
     }
@@ -23,19 +29,29 @@ public class Validator {
         return !isEmpty(phone) && phone.matches("\\d{10}");
     }
 
-    /** Price must be a number greater than zero. */
+    /**
+     * Price must be a number greater than zero and not larger than MAX_PRICE.
+     * The upper limit stops a very large value from breaking the DECIMAL(8,2)
+     * column in the food_items table.
+     */
     public static boolean isValidPrice(String price) {
         try {
-            return Double.parseDouble(price.trim()) > 0;
+            double value = Double.parseDouble(price.trim());
+            return value > 0 && value <= MAX_PRICE;
         } catch (NumberFormatException e) {
             return false;
         }
     }
 
-    /** Quantity must be a whole number greater than zero. */
+    /**
+     * Quantity must be a whole number from 1 to MAX_QUANTITY. The upper limit
+     * keeps the order total sensible and stops a huge number from breaking the
+     * total_amount column.
+     */
     public static boolean isValidQuantity(String quantity) {
         try {
-            return Integer.parseInt(quantity.trim()) > 0;
+            int value = Integer.parseInt(quantity.trim());
+            return value > 0 && value <= MAX_QUANTITY;
         } catch (NumberFormatException e) {
             return false;
         }

@@ -221,7 +221,8 @@ public class MenuPanel extends JPanel {
             return;
         }
         if (!Validator.isValidQuantity(quantityField.getText())) {
-            showError("Please enter a valid quantity, for example 1 or 2.");
+            showError("Please enter a whole number quantity from 1 to "
+                    + Validator.MAX_QUANTITY + ".");
             return;
         }
 
