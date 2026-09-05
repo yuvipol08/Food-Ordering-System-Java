@@ -83,7 +83,7 @@ public class OrderHistoryPanel extends JPanel {
                         order.getOrderId(),
                         order.getOrderNumber(),
                         order.getOrderDate(),
-                        String.format("%.2f", order.getTotalAmount()),
+                        UITheme.money(order.getTotalAmount()),
                         order.getPaymentMode(),
                         order.getStatus()
                 });

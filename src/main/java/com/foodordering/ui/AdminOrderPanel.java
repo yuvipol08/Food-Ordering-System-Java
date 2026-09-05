@@ -119,7 +119,7 @@ public class AdminOrderPanel extends JPanel {
                         order.getOrderNumber(),
                         order.getCustomerName(),
                         order.getOrderDate(),
-                        String.format("%.2f", order.getTotalAmount()),
+                        UITheme.money(order.getTotalAmount()),
                         order.getPaymentMode(),
                         order.getStatus()
                 });

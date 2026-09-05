@@ -23,7 +23,7 @@ public class LoginFrame extends JFrame {
 
     public LoginFrame() {
         setTitle("Food Ordering System - Login");
-        setSize(620, 420);
+        UITheme.setSizeWithinScreen(this, 620, 420);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());

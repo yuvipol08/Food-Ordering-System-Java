@@ -7,6 +7,7 @@ import com.foodordering.util.UITheme;
 import javax.swing.*;
 import java.awt.*;
 import java.io.PrintWriter;
+import java.util.Locale;
 
 /**
  * Shows the bill of an order.
@@ -15,6 +16,13 @@ import java.io.PrintWriter;
  */
 public class BillDialog extends JDialog {
 
+    /**
+     * The line ending used by the bill. Taking it from the system keeps the
+     * saved text file correct on Windows as well as on Linux, and using the
+     * same value on every line stops the file having mixed line endings.
+     */
+    private static final String NEW_LINE = System.lineSeparator();
+
     private final Order order;
     private final JTextArea billArea = new JTextArea();
 
@@ -22,7 +30,7 @@ public class BillDialog extends JDialog {
         super(parent, "Bill - " + order.getOrderNumber(), ModalityType.APPLICATION_MODAL);
         this.order = order;
 
-        setSize(520, 560);
+        UITheme.setSizeWithinScreen(this, 520, 560);
         setLocationRelativeTo(parent);
         setLayout(new BorderLayout());
 
@@ -63,24 +71,24 @@ public class BillDialog extends JDialog {
      */
     private String buildBillText() {
         StringBuilder bill = new StringBuilder();
-        String line = "--------------------------------------------------\n";
+        String line = "--------------------------------------------------" + NEW_LINE;
 
-        bill.append("       F O O D   O R D E R I N G   S Y S T E M\n");
-        bill.append("                  ORDER  RECEIPT\n");
+        bill.append("       F O O D   O R D E R I N G   S Y S T E M").append(NEW_LINE);
+        bill.append("                  ORDER  RECEIPT").append(NEW_LINE);
         bill.append(line);
-        bill.append(String.format("Order Number  : %s%n", order.getOrderNumber()));
-        bill.append(String.format("Order Date    : %s%n", order.getOrderDate()));
-        bill.append(String.format("Customer Name : %s%n", order.getCustomerName()));
-        bill.append(String.format("Payment Mode  : %s%n", order.getPaymentMode()));
-        bill.append(String.format("Order Status  : %s%n", order.getStatus()));
+        bill.append(String.format(Locale.ENGLISH, "Order Number  : %s%n", order.getOrderNumber()));
+        bill.append(String.format(Locale.ENGLISH, "Order Date    : %s%n", order.getOrderDate()));
+        bill.append(String.format(Locale.ENGLISH, "Customer Name : %s%n", order.getCustomerName()));
+        bill.append(String.format(Locale.ENGLISH, "Payment Mode  : %s%n", order.getPaymentMode()));
+        bill.append(String.format(Locale.ENGLISH, "Order Status  : %s%n", order.getStatus()));
         bill.append(line);
-        bill.append(String.format("%-3s %-20s %5s %4s %10s%n",
+        bill.append(String.format(Locale.ENGLISH, "%-3s %-20s %5s %4s %10s%n",
                 "No", "Food Item", "Rate", "Qty", "Amount"));
         bill.append(line);
 
         int srNo = 1;
         for (OrderItem item : order.getOrderItems()) {
-            bill.append(String.format("%-3d %-20s %5.2f %4d %10.2f%n",
+            bill.append(String.format(Locale.ENGLISH, "%-3d %-20s %5.2f %4d %10.2f%n",
                     srNo++,
                     trim(item.getFoodName()),
                     item.getPrice(),
@@ -89,9 +97,10 @@ public class BillDialog extends JDialog {
         }
 
         bill.append(line);
-        bill.append(String.format("%-34s %13.2f%n", "TOTAL AMOUNT (Rs.)", order.getTotalAmount()));
+        bill.append(String.format(Locale.ENGLISH, "%-34s %13.2f%n", "TOTAL AMOUNT (Rs.)", order.getTotalAmount()));
         bill.append(line);
-        bill.append("\n        Thank you for your order. Visit again !\n");
+        bill.append(NEW_LINE).append("        Thank you for your order. Visit again !")
+            .append(NEW_LINE);
 
         return bill.toString();
     }

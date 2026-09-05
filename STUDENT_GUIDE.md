@@ -285,7 +285,7 @@ always calls a DAO method, and only the DAO classes contain SQL statements.
 | Class | What it does |
 |---|---|
 | `Validator` | small checks — is it empty, is the email valid, is the quantity valid |
-| `UITheme` | the common colours, fonts and buttons so every screen looks the same |
+| `UITheme` | the common colours, fonts and buttons so every screen looks the same, plus `money()` for amounts and `setSizeWithinScreen()` for window sizes |
 
 **Total: 27 Java classes in 6 packages.**
 
@@ -1639,8 +1639,22 @@ code that runs in response.
 
 **38. How do all your screens look the same?**
 I wrote a small class `UITheme` that holds the colours and fonts and has methods
-`createButton`, `createTitleLabel` and `styleTable`. Every screen uses them, so
-changing one file changes the whole look.
+`createButton`, `createTitleLabel`, `styleTable`, `money` and
+`setSizeWithinScreen`. Every screen uses them, so changing one file changes the
+whole look.
+
+**38a. Why does `UITheme.money()` exist?**
+Because `String.format("%.2f", ...)` follows the regional settings of the
+computer. On a computer set to a region that writes 460,00 instead of 460.00,
+the screens that read the amount back out of the table could not open the bill.
+`UITheme.money()` always formats with a dot, so the application behaves the same
+on every computer.
+
+**38b. Why does `UITheme.setSizeWithinScreen()` exist?**
+Because on a laptop with Windows display scaling switched on, a fixed window of
+1000 x 620 can be slightly taller than the screen and the Logout button falls
+below the visible area. This method never makes a window bigger than the screen
+actually has.
 
 ### D. JDBC questions
 

@@ -27,7 +27,7 @@ public class RegisterFrame extends JDialog {
 
     public RegisterFrame(JFrame parent) {
         super(parent, "Customer Registration", true);
-        setSize(560, 520);
+        UITheme.setSizeWithinScreen(this, 560, 520);
         setLocationRelativeTo(parent);
         setLayout(new BorderLayout());
 

@@ -208,7 +208,7 @@ public class MenuPanel extends JPanel {
                     food.getFoodName(),
                     food.getDescription(),
                     food.getCategoryName(),
-                    String.format("%.2f", food.getPrice())
+                    UITheme.money(food.getPrice())
             });
         }
     }

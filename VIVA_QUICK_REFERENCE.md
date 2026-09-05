@@ -213,6 +213,12 @@ food_items 1→N order_items
    class, and a change is made once.
 10. **What would you improve first?** Encrypt the passwords.
 
+**Bonus — if the teacher asks about other computers:** all amounts go through
+`UITheme.money()` so they always use a dot whatever the computer's regional
+settings are, the bill uses one line separator so the saved file opens correctly
+in Notepad, and `UITheme.setSizeWithinScreen()` keeps every window inside the
+screen when Windows display scaling is on.
+
 ---
 
 ## 10. Common mistakes to avoid during the demonstration

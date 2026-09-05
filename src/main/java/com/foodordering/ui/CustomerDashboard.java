@@ -34,7 +34,7 @@ public class CustomerDashboard extends JFrame {
         profilePanel = new ProfilePanel(customer);
 
         setTitle("Food Ordering System - Customer");
-        setSize(1000, 620);
+        UITheme.setSizeWithinScreen(this, 1000, 620);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());

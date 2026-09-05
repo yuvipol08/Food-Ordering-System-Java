@@ -25,7 +25,7 @@ public class AdminDashboard extends JFrame {
         this.admin = admin;
 
         setTitle("Food Ordering System - Admin Dashboard");
-        setSize(1000, 620);
+        UITheme.setSizeWithinScreen(this, 1000, 620);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setLayout(new BorderLayout());

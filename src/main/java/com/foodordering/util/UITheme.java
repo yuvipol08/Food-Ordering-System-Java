@@ -6,9 +6,14 @@ import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.border.Border;
 import javax.swing.table.JTableHeader;
+import javax.swing.plaf.basic.BasicButtonUI;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Font;
+import java.awt.GraphicsEnvironment;
+import java.awt.Rectangle;
+import java.awt.Window;
+import java.util.Locale;
 
 /**
  * Common colours, fonts and small helper methods used by every screen,
@@ -32,13 +37,39 @@ public class UITheme {
     /** Makes a coloured button with white text used all over the application. */
     public static JButton createButton(String text, Color background) {
         JButton button = new JButton(text);
+        // Some look and feels, including the Windows one, paint the button
+        // themselves and ignore setBackground. Using the plain button painter
+        // keeps the colours the same on every computer.
+        button.setUI(new BasicButtonUI());
         button.setFont(new Font("SansSerif", Font.BOLD, 13));
         button.setBackground(background);
         button.setForeground(Color.WHITE);
+        button.setOpaque(true);
         button.setFocusPainted(false);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
         button.setBorder(BorderFactory.createEmptyBorder(8, 16, 8, 16));
         return button;
+    }
+
+    /**
+     * Formats an amount with two decimals and always with a dot, whatever the
+     * regional settings of the computer are. Without this a computer set to a
+     * region that writes 880,00 would break the screens that read the amount
+     * back out of a table.
+     */
+    public static String money(double amount) {
+        return String.format(Locale.ENGLISH, "%.2f", amount);
+    }
+
+    /**
+     * Sets the size of a window but never larger than the screen really has.
+     * On a small screen, or on Windows with display scaling switched on, the
+     * window is made smaller instead of its bottom going off the screen.
+     */
+    public static void setSizeWithinScreen(Window window, int width, int height) {
+        Rectangle screen = GraphicsEnvironment.getLocalGraphicsEnvironment()
+                .getMaximumWindowBounds();
+        window.setSize(Math.min(width, screen.width), Math.min(height, screen.height));
     }
 
     /** Orange bar with the screen name, placed at the top of every window. */

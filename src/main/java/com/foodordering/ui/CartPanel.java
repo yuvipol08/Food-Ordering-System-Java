@@ -121,12 +121,12 @@ public class CartPanel extends JPanel {
             tableModel.addRow(new Object[]{
                     srNo++,
                     item.getFoodItem().getFoodName(),
-                    String.format("%.2f", item.getFoodItem().getPrice()),
+                    UITheme.money(item.getFoodItem().getPrice()),
                     item.getQuantity(),
-                    String.format("%.2f", item.getSubtotal())
+                    UITheme.money(item.getSubtotal())
             });
         }
-        totalLabel.setText("Total Amount : Rs. " + String.format("%.2f", cart.getTotalAmount()));
+        totalLabel.setText("Total Amount : Rs. " + UITheme.money(cart.getTotalAmount()));
     }
 
     private void changeQuantity() {
@@ -166,7 +166,7 @@ public class CartPanel extends JPanel {
         }
 
         int choice = JOptionPane.showConfirmDialog(this,
-                "Place the order for Rs. " + String.format("%.2f", cart.getTotalAmount()) + " ?",
+                "Place the order for Rs. " + UITheme.money(cart.getTotalAmount()) + " ?",
                 "Confirm Order", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
         if (choice != JOptionPane.YES_OPTION) {
